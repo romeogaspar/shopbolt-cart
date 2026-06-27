@@ -1,5 +1,7 @@
-import Script from 'next/script'
-import './globals.css'
+import Script from "next/script";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "./globals.css";
 
 /**
  * Root layout — loads Snipcart once for the whole app.
@@ -8,12 +10,13 @@ import './globals.css'
  * Replace the API key with your Snipcart PUBLIC TEST key.
  * (In production you'd use an env var; public test key inline is fine here.)
  */
-const SNIPCART_API_KEY = 'YTJhOWJlOWQtMjQ1OS00YjY5LTk3ODctZjRhZTM0OTI5YjkxNjM5MTgxNDM0MTA0OTg4NTM4'
+const SNIPCART_API_KEY =
+  "YTJhOWJlOWQtMjQ1OS00YjY5LTk3ODctZjRhZTM0OTI5YjkxNjM5MTgxNDM0MTA0OTg4NTM4";
 
 export const metadata = {
-  title: 'ShopBolt — Modern E-Commerce',
-  description: 'A Next.js + Sanity + Snipcart store.',
-}
+  title: "ShopBolt — Modern E-Commerce",
+  description: "A Next.js + Sanity + Snipcart store.",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -25,8 +28,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <Header />
         {children}
-
+        
         <Script id="snipcart-settings" strategy="beforeInteractive">
           {`
             window.SnipcartSettings = {
@@ -41,7 +45,8 @@ export default function RootLayout({ children }) {
           src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"
           strategy="afterInteractive"
         />
+        <Footer />
       </body>
     </html>
-  )
+  );
 }
