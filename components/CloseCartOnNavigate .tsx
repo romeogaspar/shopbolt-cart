@@ -11,7 +11,7 @@ export default function CloseCartOnNavigate() {
   const pathname = usePathname()
 
   useEffect(() => {
-    (window as any).Snipcart?.api?.theme?.cart?.close()
+    window.Snipcart?.api?.theme?.cart?.close()
   }, [pathname])
 
   return null
