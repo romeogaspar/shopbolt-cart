@@ -7,13 +7,19 @@
  * /shop?q=… , and the Snipcart cart button (snipcart-checkout opens the
  * cart; snipcart-items-count shows the live count).
  *
- * Search routes to the shop page with a query param; the shop reads it
- * and pre-fills the search. (Wiring the shop to read ?q is optional — the
- * shop's own search box also works standalone.)
+ * Every navigation action first closes any open Snipcart view (side
+ * drawer or #/cart full cart) — Snipcart's overlay is hash-routed and
+ * doesn't listen to Next's router, so without this the cart stays open
+ * on top of the new page and links appear dead.
  */
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+
+/** Close any open Snipcart view. No-op if the cart is already closed. */
+function closeCart() {
+  window.Snipcart?.api?.theme?.cart?.close()
+}
 
 export default function Header() {
   const router = useRouter()
@@ -21,6 +27,7 @@ export default function Header() {
 
   function onSearch(e) {
     e.preventDefault()
+    closeCart()
     const term = q.trim()
     router.push(term ? `/shop?q=${encodeURIComponent(term)}` : '/shop')
   }
@@ -28,12 +35,14 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <Link href="/" className="site-header__logo">
+        <Link href="/" className="site-header__logo" onClick={closeCart}>
           Shop<span>Bolt</span>
         </Link>
 
         <nav className="site-header__nav">
-          <Link href="/shop" className="site-header__link">Shop</Link>
+          <Link href="/shop" className="site-header__link" onClick={closeCart}>
+            Shop
+          </Link>
         </nav>
 
         <form className="site-header__search" onSubmit={onSearch}>

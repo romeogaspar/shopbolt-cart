@@ -1,15 +1,9 @@
 import Script from "next/script";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import CloseCartOnNavigate from "../components/CloseCartOnNavigate ";
 import "./globals.css";
 
-/**
- * Root layout — loads Snipcart once for the whole app.
- * Uses the current SnipcartSettings install method.
- *
- * Replace the API key with your Snipcart PUBLIC TEST key.
- * (In production you'd use an env var; public test key inline is fine here.)
- */
 const SNIPCART_API_KEY =
   "YTJhOWJlOWQtMjQ1OS00YjY5LTk3ODctZjRhZTM0OTI5YjkxNjM5MTgxNDM0MTA0OTg4NTM4";
 
@@ -30,22 +24,27 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         {children}
-        
+        <Footer />
+
+        <CloseCartOnNavigate />
+
+        {/* Must be defined BEFORE snipcart.js runs — v3.7.x reads it at init */}
         <Script id="snipcart-settings" strategy="beforeInteractive">
           {`
             window.SnipcartSettings = {
               publicApiKey: "${SNIPCART_API_KEY}",
-              loadStrategy: "on-user-interaction",
+              version: "3.7.3",
+              addProductBehavior: "none",
+              modalStyle: "side",
             };
-            
           `}
         </Script>
+
         <div hidden id="snipcart" data-api-key={SNIPCART_API_KEY} />
         <Script
           src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"
           strategy="afterInteractive"
         />
-        <Footer />
       </body>
     </html>
   );
