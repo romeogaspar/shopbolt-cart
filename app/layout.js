@@ -22,23 +22,23 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <Header />
-        {children}
-        <Footer />
-
-        <CloseCartOnNavigate />
-
         {/* Must be defined BEFORE snipcart.js runs — v3.7.x reads it at init */}
         <Script id="snipcart-settings" strategy="beforeInteractive">
           {`
             window.SnipcartSettings = {
               publicApiKey: "${SNIPCART_API_KEY}",
               version: "3.7.3",
+              loadStrategy: "on-user-interaction",
               addProductBehavior: "none",
               modalStyle: "side",
             };
           `}
         </Script>
+        <Header />
+        {children}
+        <Footer />
+
+        <CloseCartOnNavigate />       
 
         <div hidden id="snipcart" data-api-key={SNIPCART_API_KEY} />
         <Script
@@ -46,6 +46,7 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
       </body>
+      
     </html>
   );
 }
