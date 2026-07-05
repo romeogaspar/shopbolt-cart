@@ -4,21 +4,24 @@
  * ShopFilter — the interactive layer of the shop page.
  *
  * Pattern: the parent (server component) fetches ALL products once and
- * passes them in as a prop. This component filters that array in the
- * browser based on the chosen category and search text. Instant, no
- * re-fetch per keystroke, and the full product list is still in the
- * server-rendered HTML for SEO.
+ * passes them in as a prop, along with any ?q= search term from the URL
+ * (initialQuery). This component filters the array in the browser based
+ * on the chosen category and search text.
  *
- * (For a catalogue of hundreds+, you'd filter server-side via GROQ —
- * the same approach as your Sanity filter prototype. For a typical shop,
- * client-side filtering of the full set is simpler and snappier.)
+ * initialQuery syncs via effect (not just initial state) because a
+ * Header search while already on /shop re-renders this component with a
+ * new prop but does NOT remount it — initial state alone would go stale.
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import ProductCard from './ProductCard'
 
-export default function ShopFilter({ products, categories }) {
+export default function ShopFilter({ products, categories, initialQuery = '' }) {
   const [activeCategory, setActiveCategory] = useState('all')
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(initialQuery)
+
+  useEffect(() => {
+    setSearch(initialQuery)
+  }, [initialQuery])
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()

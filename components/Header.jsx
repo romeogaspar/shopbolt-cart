@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 /**
  * Header — shared site navigation, appears on every page.
@@ -12,25 +12,27 @@
  * doesn't listen to Next's router, so without this the cart stays open
  * on top of the new page and links appear dead.
  */
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 /** Close any open Snipcart view. No-op if the cart is already closed. */
 function closeCart() {
-  window.Snipcart?.api?.theme?.cart?.close()
+  window.Snipcart?.api?.theme?.cart?.close();
 }
 
-export default function Header() {
-  const router = useRouter()
-  const [q, setQ] = useState('')
 
-  function onSearch(e) {
-    e.preventDefault()
-    closeCart()
-    const term = q.trim()
-    router.push(term ? `/shop?q=${encodeURIComponent(term)}` : '/shop')
-  }
+
+export default function Header() {
+  const router = useRouter();
+  const [q, setQ] = useState("");
+
+  const onSearch = (e) => {
+    e.preventDefault();
+    closeCart();
+    const term = q.trim();
+    router.push(term ? `/shop?q=${encodeURIComponent(term)}` : "/shop");
+  };
 
   return (
     <header className="site-header">
@@ -44,7 +46,6 @@ export default function Header() {
             Shop
           </Link>
         </nav>
-
         <form className="site-header__search" onSubmit={onSearch}>
           <input
             type="search"
@@ -55,11 +56,14 @@ export default function Header() {
           />
         </form>
 
-        <button className="site-header__cart snipcart-checkout" aria-label="Open cart">
+        <button
+          className="site-header__cart snipcart-checkout"
+          aria-label="Open cart"
+        >
           🛒
           <span className="site-header__badge snipcart-items-count">0</span>
         </button>
       </div>
     </header>
-  )
+  );
 }
