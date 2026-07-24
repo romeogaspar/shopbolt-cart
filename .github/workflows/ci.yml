@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      # These are all NEXT_PUBLIC_* values baked into the client bundle
+      # anyway, so they're safe to keep in the workflow file. If you ever
+      # add a genuinely secret env var (e.g. SANITY_API_TOKEN), set it via
+      # repo Settings -> Secrets and reference it as ${{ secrets.NAME }}.
+      NEXT_PUBLIC_SANITY_PROJECT_ID: q8mqtaz8
+      NEXT_PUBLIC_SANITY_DATASET: production
+      NEXT_PUBLIC_SITE_URL: https://shopbolt.example.com
+      NEXT_PUBLIC_SNIPCART_API_KEY: YTJhOWJlOWQtMjQ1OS00YjY5LTk3ODctZjRhZTM0OTI5YjkxNjM5MTgxNDM0MTA0OTg4NTM4
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build

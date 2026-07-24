@@ -1,15 +1,32 @@
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CloseCartOnNavigate from "../components/CloseCartOnNavigate ";
 import "./globals.css";
 
-const SNIPCART_API_KEY =
-  "YTJhOWJlOWQtMjQ1OS00YjY5LTk3ODctZjRhZTM0OTI5YjkxNjM5MTgxNDM0MTA0OTg4NTM4";
+const SNIPCART_API_KEY = process.env.NEXT_PUBLIC_SNIPCART_API_KEY;
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata = {
-  title: "ShopBolt — Modern E-Commerce",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "ShopBolt — Modern E-Commerce",
+    template: "%s | ShopBolt",
+  },
   description: "A Next.js + Sanity + Snipcart store.",
+  openGraph: {
+    type: "website",
+    siteName: "ShopBolt",
+    title: "ShopBolt — Modern E-Commerce",
+    description: "Shop modern products. Fast, simple, secure checkout.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShopBolt — Modern E-Commerce",
+    description: "Shop modern products. Fast, simple, secure checkout.",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -45,6 +62,7 @@ export default function RootLayout({ children }) {
           src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"
           strategy="afterInteractive"
         />
+        <Analytics />
       </body>
       
     </html>

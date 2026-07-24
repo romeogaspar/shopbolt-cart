@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { isOnSale } from '../lib/pricing'
 
 /**
  * ProductCard — a single product tile for grids (shop, home).
@@ -6,8 +7,7 @@ import Link from 'next/link'
  * so it renders into the HTML for SEO.
  */
 export default function ProductCard({ product }) {
-  const onSale =
-    product.compareAtPrice && product.compareAtPrice > product.price
+  const onSale = isOnSale(product)
 
   return (
     <Link href={`/product/${product.slug}`} className="pcard">

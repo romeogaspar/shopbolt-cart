@@ -57,6 +57,13 @@ export default function Header() {
         </form>
 
         <button
+          className="site-header__account snipcart-customer-signin"
+          aria-label="Sign in / My orders"
+        >
+          Sign in
+        </button>
+
+        <button
           className="site-header__cart snipcart-checkout"
           aria-label="Open cart"
         >

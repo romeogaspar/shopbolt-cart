@@ -8,20 +8,24 @@
  * (initialQuery). This component filters the array in the browser based
  * on the chosen category and search text.
  *
- * initialQuery syncs via effect (not just initial state) because a
- * Header search while already on /shop re-renders this component with a
- * new prop but does NOT remount it — initial state alone would go stale.
+ * initialQuery is re-synced on every render where it changes (not just
+ * initial state) because a Header search while already on /shop re-renders
+ * this component with a new prop but does NOT remount it — initial state
+ * alone would go stale. This compares-and-sets during render instead of in
+ * an effect, per React's "adjusting state when a prop changes" pattern.
  */
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import ProductCard from './ProductCard'
 
 export default function ShopFilter({ products, categories, initialQuery = '' }) {
   const [activeCategory, setActiveCategory] = useState('all')
   const [search, setSearch] = useState(initialQuery)
+  const [prevInitialQuery, setPrevInitialQuery] = useState(initialQuery)
 
-  useEffect(() => {
+  if (initialQuery !== prevInitialQuery) {
+    setPrevInitialQuery(initialQuery)
     setSearch(initialQuery)
-  }, [initialQuery])
+  }
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()

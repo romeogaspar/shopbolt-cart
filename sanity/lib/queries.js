@@ -37,6 +37,30 @@ export async function getProductBySlug(slug) {
   )
 }
 
+// Related products — same category, excluding the current product. Capped at 4.
+export async function getRelatedProducts(category, excludeSlug) {
+  if (!category) return []
+  return client.fetch(
+    `*[_type == "product" && category == $category && slug.current != $excludeSlug] | order(name asc) [0...4] {
+      _id, name, "slug": slug.current, price, compareAtPrice,
+      category, inStock,
+      "imageUrl": images[0].asset->url
+    }`,
+    { category, excludeSlug }
+  )
+}
+
+// Approved reviews for a product, newest first.
+export async function getApprovedReviews(productSlug) {
+  return client.fetch(
+    `*[_type == "review" && approved == true && product->slug.current == $productSlug]
+      | order(createdAt desc) {
+      _id, name, rating, comment, createdAt
+    }`,
+    { productSlug }
+  )
+}
+
 // All slugs — so Next.js can pre-render every product page at build time.
 export async function getAllProductSlugs() {
   const slugs = await client.fetch(
