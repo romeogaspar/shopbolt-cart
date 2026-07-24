@@ -14,7 +14,7 @@ import Image from "next/image";
  * the first few products so the section is never empty.
  */
 export const metadata = {
-  title: "ShopBolt — Modern E-Commerce",
+  title: { absolute: "ShopBolt — Modern E-Commerce" },
   description: "Shop modern products. Fast, simple, secure checkout.",
 };
 

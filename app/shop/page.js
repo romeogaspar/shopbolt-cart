@@ -2,7 +2,7 @@ import { getAllProducts } from '../../sanity/lib/queries'
 import ShopFilter from '../../components/ShopFilter'
 
 export const metadata = {
-  title: 'Shop | ShopBolt',
+  title: 'Shop',
   description: 'Browse all products — filter by category and search.',
 }
 
